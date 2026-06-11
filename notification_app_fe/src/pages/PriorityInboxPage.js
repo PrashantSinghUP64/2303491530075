@@ -1,10 +1,3 @@
-/**
- * PriorityInboxPage
- * - Displays top-N priority notifications fetched from the backend
- * - Priority scoring: Placement (3) > Result (2) > Event (1) + recency
- * - User can select how many top notifications to view (10, 15, 20)
- * - Supports additional client-side filter by notification type
- */
 import { useState, useEffect, useCallback } from "react";
 import {
   Container, Typography, Box, Chip, LinearProgress, Alert,
@@ -12,15 +5,11 @@ import {
   InputLabel, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
 
-/* ------------------------------------------------------------------ */
-/*  Config                                                               */
-/* ------------------------------------------------------------------ */
+// Config
 const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJwcmFzaGFudEBtcGdpLmVkdS5pbiIsImV4cCI6MTc4MTE2NzcxNywiaWF0IjoxNzgxMTY2ODE3LCJpc3MiOiJBZmZvcmQgTWVkaWNhbCBUZWNobm9sb2dpZXMgUHJpdmF0ZSBMaW1pdGVkIiwianRpIjoiZTgyM2Q0MmYtOWQwYS00MGQ1LWFhNTEtNWFjZDBlYWE5Y2QxIiwibG9jYWxlIjoiZW4tSU4iLCJuYW1lIjoicHJhc2hhbnQga3VtYXIgc2luZ2giLCJzdWIiOiI4ZmQ0Y2MzNC1jYWJjLTQ2ZmItOWI1Mi02MGYwMjBjMjRlYWMifSwiZW1haWwiOiJwcmFzaGFudEBtcGdpLmVkdS5pbiIsIm5hbWUiOiJwcmFzaGFudCBrdW1hciBzaW5naCIsInJvbGxObyI6IjIzMDM0OTE1MzAwNzUiLCJhY2Nlc3NDb2RlIjoiQkFWRFNoIiwiY2xpZW50SUQiOiI4ZmQ0Y2MzNC1jYWJjLTQ2ZmItOWI1Mi02MGYwMjBjMjRlYWMiLCJjbGllbnRTZWNyZXQiOiJaanpUQVl6cEtHWmhIWUJDIn0.u-dY_jO2Z9Fzrcuc8G3YXpqU5Ddvz9HeQK6OcNkgNkc";
 const BACKEND_URL = "http://localhost:3001";
 
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                              */
-/* ------------------------------------------------------------------ */
+// Helpers
 /** MUI chip color per notification type */
 const typeColor = (type) => {
   if (type === "Placement") return "success";
@@ -50,9 +39,7 @@ const typeEmoji = (type) => {
   return "🎉";
 };
 
-/* ------------------------------------------------------------------ */
-/*  Page Component                                                       */
-/* ------------------------------------------------------------------ */
+// Page Component
 export default function PriorityInboxPage() {
   const [notifications, setNotifications] = useState([]);
   const [topN, setTopN] = useState(10);

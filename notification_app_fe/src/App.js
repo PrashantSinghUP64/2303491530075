@@ -1,9 +1,3 @@
-/**
- * Notification Platform - Main App Entry Point
- * Uses React Router for multi-page navigation between:
- *   1. All Notifications (with filter + read/unread)
- *   2. Priority Inbox (top-n by Placement > Result > Event)
- */
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import {
   AppBar, Toolbar, Typography, Button, Box, CssBaseline, ThemeProvider, createTheme
@@ -11,9 +5,7 @@ import {
 import AllNotificationsPage from "./pages/AllNotificationsPage";
 import PriorityInboxPage from "./pages/PriorityInboxPage";
 
-/* ------------------------------------------------------------------ */
-/*  MUI Theme                                                            */
-/* ------------------------------------------------------------------ */
+// MUI Theme
 const theme = createTheme({
   palette: {
     mode: "light",
@@ -26,9 +18,7 @@ const theme = createTheme({
   },
 });
 
-/* ------------------------------------------------------------------ */
-/*  Navigation Bar                                                       */
-/* ------------------------------------------------------------------ */
+// Navigation Bar
 function NavBar() {
   const location = useLocation();
 
@@ -68,9 +58,7 @@ function NavBar() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  App Root                                                             */
-/* ------------------------------------------------------------------ */
+// App Root
 function App() {
   return (
     <ThemeProvider theme={theme}>

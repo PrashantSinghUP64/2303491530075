@@ -1,26 +1,15 @@
-/**
- * AllNotificationsPage
- * - Fetches all notifications from the evaluation-service API
- * - Supports filter by notification_type: Placement | Event | Result
- * - Tracks read/unread state using localStorage for persistence
- * - Responsive layout using Material UI components
- */
 import { useState, useEffect, useCallback } from "react";
 import {
   Container, Typography, Box, Chip, CircularProgress, Alert,
   Card, CardContent, Stack, Badge, Tooltip, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
 
-/* ------------------------------------------------------------------ */
-/*  Config                                                               */
-/* ------------------------------------------------------------------ */
+// Config
 // Using backend as proxy to avoid CORS issues with direct API calls
 const BASE_URL = "http://localhost:3001";
 const READ_STORAGE_KEY = "readNotificationIds";
 
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                              */
-/* ------------------------------------------------------------------ */
+// Helpers
 /** Returns MUI Chip color based on notification type */
 const typeColor = (type) => {
   if (type === "Placement") return "success";
@@ -56,9 +45,7 @@ const saveReadIds = (ids) => {
   localStorage.setItem(READ_STORAGE_KEY, JSON.stringify([...ids]));
 };
 
-/* ------------------------------------------------------------------ */
-/*  Page Component                                                       */
-/* ------------------------------------------------------------------ */
+// Page Component
 export default function AllNotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState("All");
