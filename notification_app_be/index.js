@@ -80,18 +80,8 @@ async function getNotifications(notificationType = null) {
 
 const TYPE_WEIGHTS = { Placement: 3, Result: 2, Event: 1 };
 
-/**
- * Computes priority score for a notification.
- * Higher score = higher priority.
- * Formula: typeWeight * 1_000_000 + recency_timestamp_ms
- *
- * @param {Object} notification
- * @returns {number}
- */
 function getPriorityScore(notification) {
-  const weight = TYPE_WEIGHTS[notification.Type] ?? 1;
-  const recency = new Date(notification.Timestamp).getTime();
-  return weight * 1_000_000 + recency;
+  return TYPE_WEIGHTS[notification.Type] ?? 1;
 }
 
 /* ------------------------------------------------------------------ */
@@ -135,7 +125,17 @@ app.get("/priority", async (req, res) => {
     const notifications = await getNotifications();
 
     const sorted = [...notifications]
-      .sort((a, b) => getPriorityScore(b) - getPriorityScore(a))
+      .sort((a, b) => {
+        const weightA = getPriorityScore(a);
+        const weightB = getPriorityScore(b);
+        if (weightA !== weightB) {
+          return weightB - weightA; // Higher weight first
+        }
+        // If weights are equal, sort by recency (newer first)
+        const timeA = new Date(a.Timestamp).getTime();
+        const timeB = new Date(b.Timestamp).getTime();
+        return timeB - timeA;
+      })
       .slice(0, n);
 
     await Log("backend", "info", "handler", `Returning ${sorted.length} priority notifications`);

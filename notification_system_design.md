@@ -194,28 +194,22 @@ async function notify_all(student_ids, message) {
 
 ## Priority Inbox Implementation
 
-### Priority Scoring Algorithm
-Each notification is scored using a combination of:
-1. **Type Weight** — Placement (3) > Result (2) > Event (1)
-2. **Recency** — More recent notifications score higher (Unix timestamp in ms)
+### Priority Sorting Algorithm
+Priority is determined by evaluating two factors in sequence:
+1. **Type Weight** — Placement (3) > Result (2) > Event (1).
+2. **Recency (Tiebreaker)** — If two notifications have the exact same Type Weight, the one with the more recent `Timestamp` is ranked higher.
 
-```
-priorityScore = typeWeight * 1,000,000 + timestamp_ms
-```
-
-This ensures type always takes precedence, and within the same type, newer notifications come first.
+This ensures critical categories like "Placement" always remain at the top regardless of their age, while newer notifications bubble to the top within their respective categories.
 
 ### Implementation (JavaScript — notification_app_be/index.js)
 ```javascript
 function getPriorityScore(notification) {
-  const typeWeight = { "Placement": 3, "Result": 2, "Event": 1 };
-  const weight = typeWeight[notification.Type] || 1;
-  const recency = new Date(notification.Timestamp).getTime();
-  return weight * 1000000 + recency;
+  const TYPE_WEIGHTS = { "Placement": 3, "Result": 2, "Event": 1 };
+  return TYPE_WEIGHTS[notification.Type] ?? 1;
 }
 
 // GET /priority?n=10
-// Fetches from live API, sorts by score, returns top n
+// Fetches from live API, sorts first by weight, then by timestamp (descending), returns top n
 ```
 
 ### API Endpoint
