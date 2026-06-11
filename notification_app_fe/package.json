@@ -1,0 +1,30 @@
+{
+  "name": "notification_app_fe",
+  "version": "1.0.0",
+  "description": "Notification Platform Frontend",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "keywords": [],
+  "author": "Prashant Kumar Singh",
+  "license": "ISC",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-scripts": "^5.0.1"
+  }
+}
