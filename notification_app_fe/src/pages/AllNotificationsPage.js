@@ -4,34 +4,27 @@ import {
   Card, CardContent, Stack, Badge, Tooltip, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
 
-// Config
-// Using backend as proxy to avoid CORS issues with direct API calls
 const BASE_URL = "http://localhost:3001";
 const READ_STORAGE_KEY = "readNotificationIds";
 
-// Helpers
-/** Returns MUI Chip color based on notification type */
 const typeColor = (type) => {
   if (type === "Placement") return "success";
   if (type === "Result") return "primary";
   return "warning";
 };
 
-/** Returns left border color for the card */
 const borderColor = (type) => {
   if (type === "Placement") return "#2e7d32";
   if (type === "Result") return "#1565c0";
   return "#e65100";
 };
 
-/** Returns emoji icon for notification type */
 const typeEmoji = (type) => {
   if (type === "Placement") return "💼";
   if (type === "Result") return "📊";
   return "🎉";
 };
 
-/** Load read notification IDs from localStorage */
 const loadReadIds = () => {
   try {
     return new Set(JSON.parse(localStorage.getItem(READ_STORAGE_KEY) || "[]"));
@@ -40,21 +33,18 @@ const loadReadIds = () => {
   }
 };
 
-/** Save read notification IDs to localStorage */
 const saveReadIds = (ids) => {
   localStorage.setItem(READ_STORAGE_KEY, JSON.stringify([...ids]));
 };
 
-// Page Component
 export default function AllNotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // Read/unread state persisted in localStorage
+
   const [readIds, setReadIds] = useState(loadReadIds);
 
-  /** Fetch notifications from API whenever filter changes */
   const fetchNotifications = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -80,7 +70,6 @@ export default function AllNotificationsPage() {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  /** Mark notification as read on click */
   const markAsRead = (id) => {
     const updated = new Set(readIds);
     updated.add(id);
@@ -92,7 +81,7 @@ export default function AllNotificationsPage() {
 
   return (
     <Container maxWidth="md">
-      {/* Header */}
+      {}
       <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
         <Badge badgeContent={unreadCount} color="error">
           <Typography variant="h5" component="span">🔔</Typography>
@@ -105,7 +94,7 @@ export default function AllNotificationsPage() {
         </Box>
       </Box>
 
-      {/* Filter Buttons */}
+      {}
       <ToggleButtonGroup
         value={filter}
         exclusive
@@ -124,22 +113,22 @@ export default function AllNotificationsPage() {
         ))}
       </ToggleButtonGroup>
 
-      {/* Loading */}
+      {}
       {loading && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
           <CircularProgress />
         </Box>
       )}
 
-      {/* Error */}
+      {}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      {/* Empty State */}
+      {}
       {!loading && !error && notifications.length === 0 && (
         <Alert severity="info">No notifications found for this filter.</Alert>
       )}
 
-      {/* Notification Cards */}
+      {}
       <Stack spacing={1.5}>
         {notifications.map((notif) => {
           const isRead = readIds.has(notif.ID);
@@ -160,9 +149,9 @@ export default function AllNotificationsPage() {
                 <CardContent sx={{ py: "12px !important" }}>
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {/* Type chip */}
+                      {}
                       <Chip label={`${typeEmoji(notif.Type)} ${notif.Type}`} color={typeColor(notif.Type)} size="small" variant="outlined" />
-                      {/* Read/Unread indicator */}
+                      {}
                       <Typography variant="caption" color={isRead ? "text.disabled" : "primary.main"}>
                         {isRead ? "✓ Read" : "● Unread"}
                       </Typography>

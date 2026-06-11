@@ -5,7 +5,6 @@ import {
 import AllNotificationsPage from "./pages/AllNotificationsPage";
 import PriorityInboxPage from "./pages/PriorityInboxPage";
 
-// MUI Theme
 const theme = createTheme({
   palette: {
     mode: "light",
@@ -18,7 +17,6 @@ const theme = createTheme({
   },
 });
 
-// Navigation Bar
 function NavBar() {
   const location = useLocation();
 
@@ -58,7 +56,6 @@ function NavBar() {
   );
 }
 
-// App Root
 function App() {
   return (
     <ThemeProvider theme={theme}>

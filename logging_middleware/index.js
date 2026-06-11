@@ -3,16 +3,6 @@ const TOKEN =
 
 const LOG_API = "http://4.224.186.213/evaluation-service/logs";
 
-/**
- * Posts a structured log entry to the evaluation server.
- * Failures are caught silently so logging never breaks the main application flow.
- *
- * @param {string} stack    - Application layer: "backend" or "frontend"
- * @param {string} level    - Severity: "debug" | "info" | "warn" | "error" | "fatal"
- * @param {string} pkg      - Module/package name e.g. "service", "handler", "middleware"
- * @param {string} message  - Human-readable description of the event
- * @returns {Promise<void>}
- */
 const Log = async (stack, level, pkg, message) => {
   try {
     const response = await fetch(LOG_API, {
@@ -37,7 +27,7 @@ const Log = async (stack, level, pkg, message) => {
       console.warn("[LOG] Unexpected response from log API:", data);
     }
   } catch (error) {
-    // Logging must never crash the application — catch and warn only
+
     console.error("[LOG] Failed to send log:", error.message);
   }
 };
