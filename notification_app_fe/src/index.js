@@ -1,6 +1,11 @@
+/**
+ * React 18 entry point
+ * Uses createRoot API for concurrent mode rendering
+ */
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
 root.render(<App />);

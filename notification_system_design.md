@@ -187,3 +187,64 @@ async function notify_all(student_ids, message) {
 **Separate** - because:
 - DB save should never fail due to email service being down
 - Email can be retried, DB record should exist immediately
+
+---
+
+# Stage 6
+
+## Priority Inbox Implementation
+
+### Priority Scoring Algorithm
+Each notification is scored using a combination of:
+1. **Type Weight** — Placement (3) > Result (2) > Event (1)
+2. **Recency** — More recent notifications score higher (Unix timestamp in ms)
+
+```
+priorityScore = typeWeight * 1,000,000 + timestamp_ms
+```
+
+This ensures type always takes precedence, and within the same type, newer notifications come first.
+
+### Implementation (JavaScript — notification_app_be/index.js)
+```javascript
+function getPriorityScore(notification) {
+  const typeWeight = { "Placement": 3, "Result": 2, "Event": 1 };
+  const weight = typeWeight[notification.Type] || 1;
+  const recency = new Date(notification.Timestamp).getTime();
+  return weight * 1000000 + recency;
+}
+
+// GET /priority?n=10
+// Fetches from live API, sorts by score, returns top n
+```
+
+### API Endpoint
+```
+GET http://localhost:3001/priority?n=10
+```
+
+### Maintaining Top-N Efficiently as New Notifications Arrive
+**Problem:** New notifications keep coming in, naively re-sorting all notifications is O(n log n).
+
+**Solution — Min-Heap (Priority Queue):**
+- Maintain a min-heap of size `n`
+- For each new notification, compute its score
+- If score > heap's minimum → evict the minimum, insert the new one
+- This keeps the top-n updated in **O(log n)** per new notification
+
+```javascript
+// Pseudocode using a min-heap of size n
+function maintainTopN(heap, newNotification, n) {
+  const score = getPriorityScore(newNotification);
+  if (heap.size < n) {
+    heap.push({ score, notification: newNotification });
+  } else if (score > heap.peekMin().score) {
+    heap.popMin();
+    heap.push({ score, notification: newNotification });
+  }
+  // heap always contains the top-n notifications
+}
+```
+
+### Screenshots
+See `/screenshots/` folder in this repository for Postman output showing top 10 priority notifications.
